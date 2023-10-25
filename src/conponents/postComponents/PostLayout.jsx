@@ -188,12 +188,14 @@ export default function PostLayout() {
         </div>
         <div className={`pt-3 pb-5 mb-3 h-16`}>
           <button className={`float-left ml-8 mr-3 text-[10px] ${isLiked ? "text-blue-500" : ""}`} title='like'
+            disabled={user===null? true : false}
             onClick={addLike}
           >
             <span className="material-symbols-outlined">thumb_up</span><br />{totalLikes}
           </button>
 
           <button className={`float-left mx-3 text-[10px] ${isDisiked ? "text-blue-500" : ""}`}
+            disabled={user===null? true : false}
             onClick={addDisLike}
           >
             <span className="material-symbols-outlined" title='dislike'>thumb_down</span><br />{totalDisLikes}

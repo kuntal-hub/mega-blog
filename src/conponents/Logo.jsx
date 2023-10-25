@@ -6,7 +6,7 @@ function Logo({className="w-12 h-12"}) {
   return (
     <div className={`${className}`}>
         <Link to='/'>
-        <img src={postService.getPreview({fileId:"652d183893f5548d9h6f",quality:5})} alt="Logo" className='h-full w-full rounded-full'/>
+        <img src={postService.getPreview({fileId:"65390fe2a4758d81a436",quality:5})} alt="Logo" className='h-full w-full rounded-full'/>
         </Link>
     </div>
   )
