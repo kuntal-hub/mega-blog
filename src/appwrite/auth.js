@@ -100,7 +100,7 @@ export class AuthService{
     
     async createRecovery({email}){
         try {
-            await this.account.createRecovery(email,'https://mega-blog-euvwg2ohh-kuntal-maitys-projects.vercel.app/recovery-confirmation');
+            await this.account.createRecovery(email,'https://mega-blog-coral.vercel.app/recovery-confirmation');
             return true;
         } catch (error) {
             console.log("Appwrite Error: in createRecovery :",error)
@@ -138,7 +138,7 @@ export class AuthService{
     
     async createEmailVeryfication(){ 
         try {
-            await this.account.createVerification('https://mega-blog-euvwg2ohh-kuntal-maitys-projects.vercel.app/confirm-verification');
+            await this.account.createVerification('https://mega-blog-coral.vercel.app/confirm-verification');
             return true
         } catch (error) {
             console.log("Appwrite Error: in createEmailVeryfication :",error)
