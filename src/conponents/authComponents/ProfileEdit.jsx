@@ -37,6 +37,7 @@ export default function ProfileEdit() {
                       setProgress(80)
                       dispatch(setMetaData({ ...userData, photo: file.$id }))
                       setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
+                      setProgress(100);
                     }
                   })
                 })
@@ -78,7 +79,7 @@ export default function ProfileEdit() {
       </div>
       <form onSubmit={handleSubmit(chengeImg)} className='flex flex-wrap justify-center mt-3'>
 
-        <div className={`${mode === "dark" ? "bg-gray-600" : "bg-gray-200"} w-56 mx-4 px-3 pt-1 my-3 rounded-xl`}>
+        <div className={`${mode === "dark" ? "bg-gray-600" : "bg-gray-200"} w-56 mx-4 px-3 pt-1 my-3 rounded-xl overflow-hidden`}>
 
           <label htmlFor="inputfile" className={`${mode === "dark" ? "text-white" : "text-black"} text-md mt-2 font-semibold block text-center mx-auto`}>
             choose Photo
