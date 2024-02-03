@@ -1,6 +1,7 @@
 import React,{memo} from 'react';
 import {Editor} from '@tinymce/tinymce-react'
 import {Controller} from 'react-hook-form'
+import conf from '../../conf/conf';
 
 export default memo(function RTE({name,control,label,defaultValue="",mode="light"}) {
   return (
@@ -13,6 +14,7 @@ export default memo(function RTE({name,control,label,defaultValue="",mode="light
         render={({field:{onChange}})=>(
             <Editor
             initialValue={defaultValue}
+            apiKey={conf.tinyMCEApiKey}
             init={{
                 initialValue: defaultValue,
                 height: 600,
