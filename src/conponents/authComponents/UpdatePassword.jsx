@@ -87,7 +87,7 @@ export default function ChengePassword() {
                 </div>
                 {!isAllset ?
                     <div>
-                        <p className={`text-center font-bold text-xl md:text-2xl my-2 ${mode === "dark" ? "text-white" : "text-black"}`}>Chenge your Email</p>
+                        <p className={`text-center font-bold text-xl md:text-2xl my-2 ${mode === "dark" ? "text-white" : "text-black"}`}>Chenge your Password</p>
                         <p className='text-red-600 w-[90%] mx-auto'>{error}</p>
                         <form onSubmit={handleSubmit(update)}>
                             <Input mode={mode} lable="New Password :" type='password' placeholder='Enter new Password'
