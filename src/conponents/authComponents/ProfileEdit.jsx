@@ -20,69 +20,45 @@ export default function ProfileEdit() {
   const [progress, setProgress] = useState(0)
 
 
-  const chengeImg = async (data) => {
+  const chengeImg = (data) => {
     setDisbled(true)
     setProgress(10)
-    if (userData.photo !== "652d183kdgfl755548d9h6f") {
-      const res = await postService.deleteImage(userData.photo)
-      if (!res) {
+    postService.uploadImage(data.image[0])
+      .then((file) => {
+        if (file) {
+          setProgress(40)
+          if (userData.photo !== "652d183kdgfl755548d9h6f") {
+            postService.deleteImage(userData.photo)
+              .then(() => {
+                setProgress(60)
+                authService.updateUserData({ photo: file.$id }, userData.$id)
+                  .then((data) => {
+                    if (data) {
+                      setProgress(80)
+                      dispatch(setMetaData({ ...userData, photo: file.$id }))
+                      setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
+                      setProgress(100);
+                    }
+                  })
+              })
+          } else {
+            setProgress(40)
+            authService.updateUserData({ photo: file.$id }, userData.$id)
+              .then((data) => {
+                if (data) {
+                  setProgress(70)
+                  dispatch(setMetaData({ ...userData, photo: file.$id }))
+                  setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
+                  setProgress(90)
+                }
+              })
+          }
+        }
+      })
+      .finally(() => {
         setProgress(100)
         setDisbled(false)
-        return;
-      }
-    }
-    setProgress(45);
-    const uploadedImage = await postService.uploadImage(data.image[0], userData.photo === "652d183kdgfl755548d9h6f" ? null : userData.photo);
-    if (!uploadedImage) {
-      setProgress(100)
-      setDisbled(false)
-      return;
-    }
-    if (userData.photo === "652d183kdgfl755548d9h6f") {
-      const updatedUser = await authService.updateUserData({ photo: uploadedImage.$id }, userData.$id)
-      if (!updatedUser) {
-        return;
-      }
-      dispatch(setMetaData({ ...userData, photo: uploadedImage.$id }))
-    }
-    setImgURL(postService.getPreview({ fileId: uploadedImage.$id, quality: 70 }))
-    setProgress(100);
-    // postService.uploadImage(data.image[0])
-    //   .then((file) => {
-    //     if (file) {
-    //       setProgress(40)
-    //       if (userData.photo !== "652d183kdgfl755548d9h6f") {
-    //         postService.deleteImage(userData.photo)
-    //         .then(() => {
-    //             setProgress(60)
-    //             authService.updateUserData({ photo: file.$id }, userData.$id)
-    //             .then((data) => {
-    //               if (data) {
-    //                   setProgress(80)
-    //                   dispatch(setMetaData({ ...userData, photo: file.$id }))
-    //                   setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
-    //                   setProgress(100);
-    //                 }
-    //               })
-    //             })
-    //           } else {
-    //             setProgress(40)
-    //             authService.updateUserData({ photo: file.$id }, userData.$id)
-    //             .then((data) => {
-    //               if (data) {
-    //                 setProgress(70)
-    //                 dispatch(setMetaData({ ...userData, photo: file.$id }))
-    //                 setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
-    //                 setProgress(90)
-    //               }
-    //             })
-    //           }
-    //         }
-    //       })
-    // .finally(() => {
-    //   setProgress(100)
-    //   setDisbled(false)
-    // })
+      })
   }
 
 

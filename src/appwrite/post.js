@@ -120,9 +120,9 @@ export class PostService {
 
     // file 
 
-    async uploadImage(file, id) {
+    async uploadImage(file) {
         try {
-            return await this.storage.createFile(conf.appwriteBucketId, id || ID.unique(), file)
+            return await this.storage.createFile(conf.appwriteBucketId, ID.unique(), file)
         } catch (error) {
             console.log("Appwrite Error: post.js : in uploadImage :", error)
             return false;
