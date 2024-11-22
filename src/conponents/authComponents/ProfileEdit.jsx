@@ -32,12 +32,20 @@ export default function ProfileEdit() {
       }
     }
     setProgress(45);
-    const uploadedImage = await postService.uploadImage(data.image[0], userData.photo);
+    const uploadedImage = await postService.uploadImage(data.image[0], userData.photo === "652d183kdgfl755548d9h6f" ? null : userData.photo);
     if (!uploadedImage) {
       setProgress(100)
       setDisbled(false)
       return;
     }
+    if (userData.photo === "652d183kdgfl755548d9h6f") {
+      const updatedUser = await authService.updateUserData({ photo: uploadedImage.$id }, userData.$id)
+      if (!updatedUser) {
+        return;
+      }
+      dispatch(setMetaData({ ...userData, photo: uploadedImage.$id }))
+    }
+    setImgURL(postService.getPreview({ fileId: uploadedImage.$id, quality: 70 }))
     setProgress(100);
     // postService.uploadImage(data.image[0])
     //   .then((file) => {
