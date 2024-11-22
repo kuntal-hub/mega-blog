@@ -20,52 +20,68 @@ export default function ProfileEdit() {
   const [progress, setProgress] = useState(0)
 
 
-  const chengeImg = (data) => {
+  const chengeImg = async (data) => {
     setDisbled(true)
     setProgress(10)
-    postService.uploadImage(data.image[0])
-      .then((file) => {
-        if (file) {
-          setProgress(40)
-          if (userData.photo !== "652d183kdgfl755548d9h6f") {
-            postService.deleteImage(userData.photo)
-            .then(() => {
-                setProgress(60)
-                authService.updateUserData({ photo: file.$id }, userData.$id)
-                .then((data) => {
-                  if (data) {
-                      setProgress(80)
-                      dispatch(setMetaData({ ...userData, photo: file.$id }))
-                      setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
-                      setProgress(100);
-                    }
-                  })
-                })
-              } else {
-                setProgress(40)
-                authService.updateUserData({ photo: file.$id }, userData.$id)
-                .then((data) => {
-                  if (data) {
-                    setProgress(70)
-                    dispatch(setMetaData({ ...userData, photo: file.$id }))
-                    setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
-                    setProgress(90)
-                  }
-                })
-              }
-            }
-          })
-          .finally(() => {
+    if (userData.photo !== "652d183kdgfl755548d9h6f") {
+      const res = await postService.deleteImage(userData.photo)
+      if (!res) {
         setProgress(100)
         setDisbled(false)
-      })
+        return;
+      }
+    }
+    setProgress(45);
+    const uploadedImage = await postService.uploadImage(data.image[0], userData.photo);
+    if (!uploadedImage) {
+      setProgress(100)
+      setDisbled(false)
+      return;
+    }
+    setProgress(100);
+    // postService.uploadImage(data.image[0])
+    //   .then((file) => {
+    //     if (file) {
+    //       setProgress(40)
+    //       if (userData.photo !== "652d183kdgfl755548d9h6f") {
+    //         postService.deleteImage(userData.photo)
+    //         .then(() => {
+    //             setProgress(60)
+    //             authService.updateUserData({ photo: file.$id }, userData.$id)
+    //             .then((data) => {
+    //               if (data) {
+    //                   setProgress(80)
+    //                   dispatch(setMetaData({ ...userData, photo: file.$id }))
+    //                   setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
+    //                   setProgress(100);
+    //                 }
+    //               })
+    //             })
+    //           } else {
+    //             setProgress(40)
+    //             authService.updateUserData({ photo: file.$id }, userData.$id)
+    //             .then((data) => {
+    //               if (data) {
+    //                 setProgress(70)
+    //                 dispatch(setMetaData({ ...userData, photo: file.$id }))
+    //                 setImgURL(postService.getPreview({ fileId: file.$id, quality: 70 }))
+    //                 setProgress(90)
+    //               }
+    //             })
+    //           }
+    //         }
+    //       })
+    // .finally(() => {
+    //   setProgress(100)
+    //   setDisbled(false)
+    // })
   }
 
 
 
   return (
     <div className={`w-screen z-0 py-20 min-h-screen ${mode === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-black"}`}>
-        <LoadingBar
+      <LoadingBar
         color='#ff0000'
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
@@ -100,36 +116,36 @@ export default function ProfileEdit() {
           readOnly={disbled}
         />
       </form>
-      {user.emailVerification == true ? <p className='hover:underline w-[90%] mx-auto block pl-6 font-semibold'>✅ Verified Account</p>:
-      <Link className='text-blue-600 font-semibold underline w-[90%] mx-auto block pl-6'
-      to={'/verify-email'}
-      >Verify your Account</Link>}
+      {user.emailVerification == true ? <p className='hover:underline w-[90%] mx-auto block pl-6 font-semibold'>✅ Verified Account</p> :
+        <Link className='text-blue-600 font-semibold underline w-[90%] mx-auto block pl-6'
+          to={'/verify-email'}
+        >Verify your Account</Link>}
 
       <p className='w-[90%] mx-auto px-3 mt-5 mb-1 font-semibold'>UserName :</p>
-      <Input mode={mode} readOnly={true} type='text' value={`${userData.$id}`} className='w-full'/>
-      
+      <Input mode={mode} readOnly={true} type='text' value={`${userData.$id}`} className='w-full' />
+
       <p className='w-[90%] mx-auto px-3 mt-5 mb-1 font-semibold'>Email :</p>
       <div className='flex flex-nowrap justify-between w-[90%] mx-auto '>
-      <input type="text"  
-      className={`block w-[80%] rounded-lg h-10 py-3 px-4 ${mode==="dark"? "bg-gray-700 text-white" : "bg-gray-200 text-black"}`}
-      value={userData.email}
-      readOnly={true}
-      />
+        <input type="text"
+          className={`block w-[80%] rounded-lg h-10 py-3 px-4 ${mode === "dark" ? "bg-gray-700 text-white" : "bg-gray-200 text-black"}`}
+          value={userData.email}
+          readOnly={true}
+        />
         <Link to={'/edit-email'}
-        className='block rounded-lg text-center h-10 py-2 px-4 bg-green-700 text-white font-semibold
+          className='block rounded-lg text-center h-10 py-2 px-4 bg-green-700 text-white font-semibold
         hover:bg-green-500 float-left'
         >Edit</Link>
       </div>
 
       <p className='w-[90%] mx-auto px-3 mt-5 mb-1 font-semibold'>Password :</p>
       <div className='flex flex-nowrap justify-between w-[90%] mx-auto '>
-      <input type="password" 
-      className={`block w-[80%] rounded-lg h-10 py-3 px-4 ${mode==="dark"? "bg-gray-700 text-white" : "bg-gray-200 text-black"}`}
-      value={"12345678"}
-      readOnly={true}
-      />
+        <input type="password"
+          className={`block w-[80%] rounded-lg h-10 py-3 px-4 ${mode === "dark" ? "bg-gray-700 text-white" : "bg-gray-200 text-black"}`}
+          value={"12345678"}
+          readOnly={true}
+        />
         <Link to={'/edit-password'}
-        className='block rounded-lg text-center h-10 py-2 px-4 bg-green-700 text-white font-semibold
+          className='block rounded-lg text-center h-10 py-2 px-4 bg-green-700 text-white font-semibold
         hover:bg-green-500 float-left'
         >Edit</Link>
       </div>
@@ -137,7 +153,7 @@ export default function ProfileEdit() {
       <h2 className='w-[90%] mx-auto text-2xl font-bold my-8 text-green-600'
       >Edit Personal Details</h2>
 
-      <UserDetailsUpdateForm userData={userData} mode={mode}/>
+      <UserDetailsUpdateForm userData={userData} mode={mode} />
 
     </div>
   )

@@ -1,181 +1,181 @@
 import conf from "../conf/conf";
-import { Client, Databases, Query ,Storage, ID} from "appwrite";
+import { Client, Databases, Query, Storage, ID } from "appwrite";
 
-export class PostService{
+export class PostService {
     client = new Client();
     databases;
     storage
-    constructor(){
+    constructor() {
         this.client
-        .setEndpoint(conf.appwriteUrl)
-        .setProject(conf.appwriteProjectId)
-        this.databases=new Databases(this.client);
-        this.storage= new Storage(this.client);
+            .setEndpoint(conf.appwriteUrl)
+            .setProject(conf.appwriteProjectId)
+        this.databases = new Databases(this.client);
+        this.storage = new Storage(this.client);
     }
 
-    async createPost({title,content,status="active",featuredImage,userId,author}){
-        const id=ID.unique();
+    async createPost({ title, content, status = "active", featuredImage, userId, author }) {
+        const id = ID.unique();
         try {
-            return await this.databases.createDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,id,{
+            return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, id, {
                 title: title.trim().toLowerCase(),
                 content,
                 status,
                 featuredImage,
                 userId,
                 author,
-                likes:0,
-                dislikes:0 
+                likes: 0,
+                dislikes: 0
             })
 
         } catch (error) {
-            console.log("Appwrite Error: post.js : in createPost :",error)
+            console.log("Appwrite Error: post.js : in createPost :", error)
             return null;
         }
     }
 
-    async updateLikeandDislikes({slug,likes,dislikes}){
+    async updateLikeandDislikes({ slug, likes, dislikes }) {
         try {
-            await this.databases.updateDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug,{
-                likes:likes,dislikes:dislikes
+            await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, {
+                likes: likes, dislikes: dislikes
             })
             return true
         } catch (error) {
-            console.log("Appwrite Error: post.js : in updateLikeandDislikes :",error)
+            console.log("Appwrite Error: post.js : in updateLikeandDislikes :", error)
             return null;
         }
     }
 
 
-    async updatePost({slug,title,content,status="active",featuredImage,author}){
+    async updatePost({ slug, title, content, status = "active", featuredImage, author }) {
         try {
-            return await this.databases.updateDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug,{
-                title: title.trim().toLowerCase(),featuredImage,content,status,author
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, {
+                title: title.trim().toLowerCase(), featuredImage, content, status, author
             })
         } catch (error) {
-            console.log("Appwrite Error: post.js : in updatePost :",error)
+            console.log("Appwrite Error: post.js : in updatePost :", error)
             return null;
         }
     }
 
-    async getPost({slug}){
+    async getPost({ slug }) {
         try {
-            return await this.databases.getDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug)
+            return await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug)
         } catch (error) {
-            console.log("Appwrite Error: post.js : in getPost :",error)
+            console.log("Appwrite Error: post.js : in getPost :", error)
             return null;
         }
     }
-    async getPostDetails({slug}){
+    async getPostDetails({ slug }) {
         try {
-            return await this.databases.getDocument(conf.appwriteDatabaseId,conf.appwritePostDetailsCollectionId,slug)
+            return await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwritePostDetailsCollectionId, slug)
         } catch (error) {
-            console.log("Appwrite Error: post.js : in getPost :",error)
+            console.log("Appwrite Error: post.js : in getPost :", error)
             return null;
         }
     }
 
-    async deletePost({slug}){
+    async deletePost({ slug }) {
         try {
-            await this.databases.deleteDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug)
+            await this.databases.deleteDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug)
             return true;
         } catch (error) {
-            console.log("Appwrite Error: post.js : in deletePost :",error)
+            console.log("Appwrite Error: post.js : in deletePost :", error)
             return false;
         }
     }
 
-    async getAllPost({key="status",value="active",offset=0}){
-         //value must be an array,and key is string
+    async getAllPost({ key = "status", value = "active", offset = 0 }) {
+        //value must be an array,and key is string
         try {
-            return await this.databases.listDocuments(conf.appwriteDatabaseId,conf.appwriteCollectionId,
+            return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollectionId,
                 [
                     Query.limit(25),
                     Query.offset(offset),
                     Query.orderAsc('title'),
-                    Query.equal(key,[value])
+                    Query.equal(key, [value])
                 ])
         } catch (error) {
-            console.log("Appwrite Error: post.js : in getAllPost :",error)
+            console.log("Appwrite Error: post.js : in getAllPost :", error)
             return null;
         }
     }
 
-    async addComment({content,author,authorPhoto}){
+    async addComment({ content, author, authorPhoto }) {
         try {
-            
+
         } catch (error) {
-            console.log("Appwrite Error: post.js : in add comment :",error)
+            console.log("Appwrite Error: post.js : in add comment :", error)
             return false;
         }
     }
 
-    async deleteComment({content,author,authorPhoto}){
+    async deleteComment({ content, author, authorPhoto }) {
         try {
-            
+
         } catch (error) {
-            console.log("Appwrite Error: post.js : in deleteComment :",error)
+            console.log("Appwrite Error: post.js : in deleteComment :", error)
             return false;
         }
     }
 
     // file 
 
-    async uploadImage(file){
+    async uploadImage(file, id) {
         try {
-            return await this.storage.createFile(conf.appwriteBucketId,ID.unique(),file)
+            return await this.storage.createFile(conf.appwriteBucketId, id || ID.unique(), file)
         } catch (error) {
-            console.log("Appwrite Error: post.js : in uploadImage :",error)
+            console.log("Appwrite Error: post.js : in uploadImage :", error)
             return false;
         }
     }
-    async uploadProfileImage({file,id}){
+    async uploadProfileImage({ file, id }) {
         try {
-            return await this.storage.createFile(conf.appwriteBucketId,id,file)
+            return await this.storage.createFile(conf.appwriteBucketId, id, file)
         } catch (error) {
-            console.log("Appwrite Error: post.js : in uploadImage :",error)
+            console.log("Appwrite Error: post.js : in uploadImage :", error)
             return false;
         }
     }
 
-    async deleteImage(fileId){
+    async deleteImage(fileId) {
         try {
-            await this.storage.deleteFile(conf.appwriteBucketId,fileId)
+            await this.storage.deleteFile(conf.appwriteBucketId, fileId)
             return true;
         } catch (error) {
-            console.log("Appwrite Error: post.js : in deleteImage :",error)
+            console.log("Appwrite Error: post.js : in deleteImage :", error)
             return false;
         }
     }
 
-    getPreview({fileId,quality,gravity="center",width=undefined,height=undefined}){
+    getPreview({ fileId, quality, gravity = "center", width = undefined, height = undefined }) {
 
         try {
-            return this.storage.getFilePreview(conf.appwriteBucketId,fileId,width,height,gravity,quality)
+            return this.storage.getFilePreview(conf.appwriteBucketId, fileId, width, height, gravity, quality)
         } catch (error) {
-            console.log("Appwrite Error: post.js : getPreview :",error)
+            console.log("Appwrite Error: post.js : getPreview :", error)
             return null;
         }
     }
-    getView(fileId){
+    getView(fileId) {
         try {
-            return this.storage.getFileView(conf.appwriteBucketId,fileId)
+            return this.storage.getFileView(conf.appwriteBucketId, fileId)
         } catch (error) {
-            console.log("Appwrite Error: post.js : getPreview :",error)
+            console.log("Appwrite Error: post.js : getPreview :", error)
             return null;
         }
     }
 
-    downloadImage(fileId){
+    downloadImage(fileId) {
         try {
-            return this.storage.getFileDownload(conf.appwriteBucketId,fileId)
+            return this.storage.getFileDownload(conf.appwriteBucketId, fileId)
         } catch (error) {
-            console.log("Appwrite Error: post.js : getPreview :",error)
+            console.log("Appwrite Error: post.js : getPreview :", error)
             return null;
         }
     }
 
 }
 
-const postService =new PostService();
+const postService = new PostService();
 
 export default postService;
