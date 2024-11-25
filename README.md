@@ -5,7 +5,6 @@
     </a>
   <br />
 
-
   <h3 align="center">A Full stack blogging platform</h3>
 
    <div align="center">
@@ -13,7 +12,6 @@
     See the project in action <a href="https://mega-blog-coral.vercel.app/" target="_blank"><b>Here</b></a>
     </div>
 </div>
-
 
 ## 📋 <a name="table">Table of Contents</a>
 
@@ -25,7 +23,7 @@
 
 ## <a name="introduction">🤖 Introduction</a>
 
-Build an full stack 
+Building a full stack blogging platform is a great way to learn how to integrate a backend service with a frontend application. In this project, we will be building a full stack blogging platform using Appwrite and React. Appwrite is an open-source backend server that helps you build a backend for your application. It provides a set of APIs that you can use to perform various operations like authentication, database management, file storage, and more. We will be using Appwrite to build the backend for our blogging platform. We will also be using React to build the frontend for our application. React is a popular frontend library that allows you to build interactive user interfaces. We will be using React to build the frontend for our blogging platform. By the end of this project, you will have a fully functional blogging platform that allows users to create, read, update, and delete blog posts. You will also learn how to integrate Appwrite with React to build a full stack application.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
