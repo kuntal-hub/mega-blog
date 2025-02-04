@@ -11,11 +11,11 @@ import postService from '../../appwrite/post';
 export default function Header() {
     const auth = useSelector((state) => state.status);
     const user = useSelector((state) => state.userData);
-    const dispatch= useDispatch()
+    const dispatch = useDispatch()
     const userMetadata = useSelector((state) => state.userMetaData);
     const getMode = useSelector((state) => state.mode);
     const [mode, setmode] = useState(getMode);
-    const chengeMode =async () => {
+    const chengeMode = async () => {
         if (auth) {
             if (getMode === "dark") {
                 setmode("light")
@@ -26,11 +26,11 @@ export default function Header() {
                 dispatch(setMode("dark"))
                 await authService.updatePreferences({ mode: "dark" })
             }
-            
-        }else{
-            if (getMode==="dark") {
+
+        } else {
+            if (getMode === "dark") {
                 dispatch(setMode("light"))
-            }else{
+            } else {
                 dispatch(setMode("dark"))
             }
         }
@@ -41,30 +41,30 @@ export default function Header() {
                 <div className='m-0 p-0'>
                     <Logo className='w-10 h-10' />
                 </div>
-                <ul className={`w-[70%] flex flex-nowrap justify-center mt-2`}>
-                    <li><NavLink to="/" className={({isActive}) =>
-                                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}
+                <ul className={`w-[78%] sm:w-[70%] flex flex-nowrap justify-center mt-2`}>
+                    <li><NavLink to="/" className={({ isActive }) =>
+                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}
                     >
                         Home
                     </NavLink></li>
-                    <li hidden={auth ? false : true}><NavLink to="/create-post" className={({isActive}) =>
-                                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}>
+                    <li hidden={auth ? false : true}><NavLink to="/create-post" className={({ isActive }) =>
+                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}>
                         Create post
                     </NavLink></li>
-                    <li hidden={auth ? true : false}><NavLink to="/login" className={({isActive}) =>
-                                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}>
+                    <li hidden={auth ? true : false}><NavLink to="/login" className={({ isActive }) =>
+                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}>
                         Login
                     </NavLink></li>
-                    <li hidden={auth ? true : false}><NavLink to="/signup" className={({isActive}) =>
-                                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}>
+                    <li hidden={auth ? true : false}><NavLink to="/signup" className={({ isActive }) =>
+                        `text-md hover:text-black font-bold mx-3 ${isActive ? "text-black" : "text-white"}`}>
                         Sign Up
                     </NavLink></li>
-                    <li title={`${mode==="dark"? "light":"dark"} mode`}><button className={"material-symbols-outlined text-white mx-3"} onClick={chengeMode}>
-                        {mode==="dark"? "light":"dark"}_mode
+                    <li title={`${mode === "dark" ? "light" : "dark"} mode`}><button className={"material-symbols-outlined text-white mx-3"} onClick={chengeMode}>
+                        {mode === "dark" ? "light" : "dark"}_mode
                     </button></li>
                 </ul>
-                {auth&&userMetadata ? <div className='m-0 p-0' title='My Profile'>
-                    <ProfileLogo URL={`/user/${user.$id}`} imgURL={postService.getPreview({fileId:userMetadata.photo,quality:5})} />
+                {auth && userMetadata ? <div className='m-0 p-0' title='My Profile'>
+                    <ProfileLogo URL={`/user/${user.$id}`} imgURL={postService.getPreview({ fileId: userMetadata.photo, quality: 5 })} />
                 </div> : null}
 
             </header>
